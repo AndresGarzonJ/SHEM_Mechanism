@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.sf.net/xsd/sumoConfiguration.xsd">
+    <input>
+        <net-file value="scenario_2gnb.net.xml"/>
+        <route-files value="scenario_2gnb.rou.xml"/>
+        <additional-files value="scenario_2gnb.add.xml"/>
+    </input>
+
+    <gui_only>
+        <gui-settings-file value="scenario_2gnb.settings.xml"/>
+    </gui_only>
+
+    <output>
+    <tripinfo-output value="scenariotripinfo_2gnbs.out.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="1000"/>
+    <step-length value="0.1"/>
+    </time>
+    <report>
+        <no-step-log value="true"/>
+        <xml-validation value="never"/>
+    </report>
+    <traci_server>
+    <processing>
+        <time-to-teleport value="100"/>
+    </processing>
+         <remote-port value="8813"/>
+    </traci_server>
+</configuration>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2022-07-04 16:21:12 by Eclipse SUMO netedit Version 1.13.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="our_vehicle_10" maxSpeed="2.78" color="green"/>
+    <vType id="our_vehicle_20" maxSpeed="5.56" color="green"/>
+    <vType id="our_vehicle_40" maxSpeed="11.11" color="green"/>
+    <vType id="our_vehicle_50" maxSpeed="13.89" color="green"/>
+    <vType id="our_vehicle_60" maxSpeed="16.67" color="green"/>
+
+    <vType id="our_vehicle_10_test" maxSpeed="2.78" color="yellow"/>
+    <vType id="our_vehicle_20_test" maxSpeed="5.56" color="yellow"/>
+    <vType id="our_vehicle_30_test" maxSpeed="8.33" color="yellow"/>
+    <vType id="our_vehicle_40_test" maxSpeed="11.11" color="yellow"/>
+    <vType id="our_vehicle_50_test" maxSpeed="13.89" color="yellow"/>
+    <vType id="our_vehicle_60_test" maxSpeed="16.67" color="yellow"/>
+    <!-- Routes -->
+    <route id="route_0" edges="calle0 calle1 calle2 retorno -calle2 -calle1 -calle0"/>
+
+
+    <vehicle id="6" type="our_vehicle_20"       depart="2.00" route="route_0"/>
+    <vehicle id="0" type="our_vehicle_60_test"  depart="4.00" route="route_0"/>
+    <vehicle id="7" type="our_vehicle_40"       depart="6.00" route="route_0"/>
+    <vehicle id="1" type="our_vehicle_60_test"  depart="8.00" route="route_0"/>    
+    <vehicle id="8" type="our_vehicle_40"       depart="10.00" route="route_0"/>
+    <vehicle id="2" type="our_vehicle_60_test"  depart="12.00" route="route_0"/>    
+    <vehicle id="9" type="our_vehicle_20"       depart="14.00" route="route_0"/>
+    <vehicle id="3" type="our_vehicle_60_test"  depart="16.00" route="route_0"/>
+    <vehicle id="10" type="our_vehicle_40"      depart="18.00" route="route_0"/>
+    <vehicle id="4" type="our_vehicle_60_test"  depart="20.00" route="route_0"/>
+    <vehicle id="11" type="our_vehicle_40"      depart="22.00" route="route_0"/>    
+    <vehicle id="5" type="our_vehicle_60_test"  depart="24.00" route="route_0"/>
+</routes>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2022-04-09 17:17:56 by Eclipse SUMO netedit Version 1.12.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <sumo-net-file value="/home/mininet/mininet-wifi/mn_wifi/sumo/data/scenario.net.xml"/>
+    </input>
+
+    <output>
+        <output-file value="/home/mininet/mininet-wifi/mn_wifi/sumo/data/scenario.net.xml"/>
+    </output>
+
+    <processing>
+        <geometry.min-radius.fix.railways value="false"/>
+        <geometry.max-grade.fix value="false"/>
+        <offset.disable-normalization value="true"/>
+        <lefthand value="false"/>
+    </processing>
+
+    <junctions>
+        <no-turnarounds value="true"/>
+        <junctions.corner-detail value="5"/>
+        <junctions.limit-turn-speed value="5.5"/>
+        <rectangular-lane-cut value="false"/>
+    </junctions>
+
+    <pedestrian>
+        <walkingareas value="false"/>
+    </pedestrian>
+
+    <netedit>
+        <additional-files value="/home/mininet/mininet-wifi/mn_wifi/sumo/data/scenario.add.xml"/>
+    </netedit>
+
+    <report>
+        <aggregate-warnings value="5"/>
+    </report>
+
+</configuration>
+-->
+
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <!--
+    <rerouter id="rerouter_0" edges="calle1">
+        <interval begin="0" end="1e9">
+           <destProbReroute id="calle5"/>
+        </interval>
+    </rerouter>
+    <rerouter id="rerouter_1" edges="calle5">
+        <interval begin="0" end="1e9">
+           <destProbReroute id="calle1"/>
+        </interval>
+    </rerouter>
+    <rerouter id="rerouter_1" edges="calle5">
+        <interval begin="0" end="1e9">
+           <destProbReroute id="calle1"/>
+        </interval>
+    </rerouter>
+    -->
+
+    <rerouter id="rerouter_0" edges="calle0">
+        <interval begin="0" end="1e9">
+           <destProbReroute id="-calle0"/>
+        </interval>
+    </rerouter>
+    <rerouter id="rerouter_1" edges="-calle0">
+        <interval begin="0" end="1e9">
+           <destProbReroute id="calle0"/>
+        </interval>
+    </rerouter>
+    <rerouter id="rerouter_1" edges="-calle0">
+        <interval begin="0" end="1e9">
+           <destProbReroute id="calle0"/>
+        </interval>
+    </rerouter>
+    
+
+    <!--
+    <parkingArea id="pa_0" name="pa0" lane="rcalle0_0" startPos="41.12" endPos="51.12" roadsideCapacity="1"/>
+    <parkingArea id="pa_1" name="pa1" lane="rcalle1_0" startPos="19.62" endPos="29.62" roadsideCapacity="1"/>
+    <parkingArea id="pa_2" name="pa2" lane="rcalle3_0" startPos="170.30" endPos="180.30" roadsideCapacity="1"/>
+    <parkingArea id="pa_3" name="pa4" lane="rcalle4_0" startPos="170.88" endPos="180.88" roadsideCapacity="1"/>
+    -->
+</additional>
+ 
