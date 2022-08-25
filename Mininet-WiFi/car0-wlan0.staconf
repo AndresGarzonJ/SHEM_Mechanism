@@ -1,0 +1,20 @@
+ctrl_interface=/var/run/wpa_supplicant
+eapol_version=2
+fast_reauth=1
+okc=1
+bss_expiration_age=180
+bss_expiration_scan_count=4
+network={
+   ssid="handover"
+   proto=WPA2
+   key_mgmt=FT-EAP
+   ft_eap_pmksa_caching=1
+   proactive_key_caching=1
+   pairwise=CCMP
+   group=CCMP
+   eap=TTLS
+   identity="joe0"
+   anonymous_identity="anon"
+   password="sdnteam"
+   phase2="autheap=MSCHAPV2"
+}
