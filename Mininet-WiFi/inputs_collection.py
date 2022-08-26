@@ -12,20 +12,13 @@ from scapy.all import *
 #from scapy import *
 import time
 
-#wlan.fc.type==0 && wlan.fc.subtype==8
 j_k_list = {}
 j_k_rssi_load_t = {}
-#j_k_list = dict()
-#j_k_rssi_load_t = dict()
-
 load_j_k_t_1 = 999
 rssi_j_k_id_car_t_1 = -90
-
 load_j_k_t = 999
 rssi_j_k_id_car_t = -90
-
 flag_first_send = 0
-
 flag_time_start = 0
 flag_time_scan = 0
 time_Start = 0
@@ -37,16 +30,6 @@ time_Scan = 0
 ######################## Test ############################
 time_send = 1.5
 time_scan_flag = 5
-
-"""
-t_s_asociacion = {}
-t_r_asociacion = {}
-t_s_re_asociacion = {}
-t_r_re_asociacion = {}
-t_des_asociacion = {}
-t_autenticacion = {}
-t_des_autenticacion = {}
-"""
 
 id_t_s_asociacion = 0
 id_t_r_asociacion = 0
@@ -60,7 +43,6 @@ id_t_des_autenticacion = 0
 id_t_action = 0
 id_t_action_no_ack = 0
 
-# Cuando cambie nSlice, el carro ejecute un sondeo
 nSlice = 0
  
 class Sniffer(Thread):
@@ -74,20 +56,11 @@ class Sniffer(Thread):
         self.latency_servers[1] = (int(sys.argv[4])) # Para wlan1-0
         self.latency_servers[2] = (int(sys.argv[5])) # Para wlan1-1
         self.latency_servers[3] = (int(sys.argv[6])) # Para wlan1-2
-        self.ConSlicing = str(sys.argv[7])       #-conSlicing
-        self.gnb1ConSlicing = str(sys.argv[8])   #-gnb1ConSlicing
-
+        
         self.mac_gnb = {}
-        if  self.gnb1ConSlicing == "-gnb1ConSlicing":
-            self.mac_gnb[0] = "02:00:00:00:%s:00" % format(self.n_Cars,'02x')   # gnb1-wlan1
-
-        if  self.ConSlicing == "-conSlicing":
-            self.mac_gnb[1] = "02:00:00:00:%s:00" % format(self.n_Cars+1,'02x') # gnb2-wlan1
-            #self.mac_gnb[2] = "02:00:00:00:%s:00" % format(self.n_Cars+2,'02x') # gnb3-wlan1
-            #self.mac_gnb[3] = "02:00:00:00:%s:00" % format(self.n_Cars+3,'02x') # gnb4-wlan1
-            #self.mac_gnb[4] = "02:00:00:00:%s:00" % format(self.n_Cars+4,'02x') # gnb5-wlan1
-
-        #self.mac_Car = '0002:00:00:00:%02d:00' % int(self.id_car)
+        self.mac_gnb[0] = "02:00:00:00:%s:00" % format(self.n_Cars,'02x')   # gnb1-wlan1
+        self.mac_gnb[1] = "02:00:00:00:%s:00" % format(self.n_Cars+1,'02x') # gnb2-wlan1
+        
         self.mac_Car = "0002:00:00:00:%s:00" % format(int(self.id_car),'02x')
 
         
