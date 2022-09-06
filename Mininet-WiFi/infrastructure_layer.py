@@ -35,7 +35,7 @@ Para ejecutar este script debe:
     sudo systemctl stop  apache-htcacheclean.service
     alias python=python2  && cd /home/mininet/v2x-slicing/single/ryu
     sudo mn -c
-    sudo python test_2_802_11_rsna_6cars.py -sumo -conSlicing -gnb1ConSlicing -test1
+    sudo python infrastructure_layer.py -gnb2WithSlicing -gnb1WithSlicing -test1
 
     # Terminal 2
     alias python=python2  && cd /home/mininet/v2x-slicing/single/ryu
@@ -95,19 +95,16 @@ from mininet.link import TCLink
 from mn_wifi.sumo.runner import sumo
 from mininet.log import error, debug, info
 
-# Conexion entre AP-Controlador https://gist.github.com/ramonfontes/7beddaf5eebbfd35750efd7974bf22e4
-#sudo util/install.sh -3f installs Bofuss
-from mn_wifi.node import UserAP
+from mn_wifi.node import UserAP #sudo util/install.sh -3f ### For install BOFUSS
 
-def topology(flag,flag2,flag3,flag4):
+def topology(flag2,flag3,flag4):
     
-    os.system('rm radius.txt')
     os.system('rm /run/hostapd/gnb*')
     os.system('rm log_wpa/*')
     
     ######################## Parameters for testing
-    n_Cars = 12         # Total number of vehicles in the network
-    n_Cars_test = 6     # Vehicles that operate with our mechanism
+    n_Vehicles = 12         # Total number of vehicles in the network
+    n_Vehicles_test = 6     # Vehicles that operate with our mechanism
     nSlices = 3
 
     reqQoS_Apps = {} # [latency,bw_slice, bw_car]
@@ -129,15 +126,15 @@ def topology(flag,flag2,flag3,flag4):
 
     debug("*** Creating vehicles\n")
     cars = []
-    for x in range(0, n_Cars):
+    for x in range(0, n_Vehicles):
         cars.append(x)
 
-    for x in range(0, n_Cars_test):
+    for x in range(0, n_Vehicles_test):
         cars[x] = net.addCar('car%s' %(int(x)),  wlans=1, encrypt='wpa2', range = 100,
             radius_passwd='sdnteam', radius_identity='joe%s'% int(x), inNamespace=True)
         time.sleep(0.5)
     
-    for x in range(n_Cars_test, n_Cars):
+    for x in range(n_Vehicles_test, n_Vehicles):
         cars[x] = net.addCar('car%s' %(int(x)),  wlans=1, encrypt='wpa2', range = 100,
             radius_passwd='sdnteam', radius_identity='joe%s'% int(x), inNamespace=True,
             bgscan_threshold=-60, s_interval=3, l_interval=6, bgscan_module="simple") 
@@ -146,9 +143,9 @@ def topology(flag,flag2,flag3,flag4):
     debug("*** Creating gNBs\n")
     kwargs = {'protocols':'OpenFlow13', 'ssid': 'handover', 'encrypt': 'wpa2', 'mode': 'g','passwd': '123456789a','authmode': '80211r', 'ieee80211r':'yes','mobility_domain': 'a1b2', 'radius_server': '192.168.0.210'}
     
-    gnb1 = net.addAccessPoint('gnb1', channel='1', vssids=['handover,handover,handover'], bssid_list={0:('gnb1','02:00:00:00:%s:00' % format(n_Cars,'02x'),'192.168.0.201',n_Cars,nSlices,flag2,flag3),1:('gnb2','02:00:00:00:%s:00' % format(n_Cars+1,'02x'),'0')}, dpid='1', position='1150,30,0', **kwargs)
+    gnb1 = net.addAccessPoint('gnb1', channel='1', vssids=['handover,handover,handover'], bssid_list={0:('gnb1','02:00:00:00:%s:00' % format(n_Vehicles,'02x'),'192.168.0.201',n_Vehicles,nSlices,flag2,flag3),1:('gnb2','02:00:00:00:%s:00' % format(n_Vehicles+1,'02x'),'0')}, dpid='1', position='1150,30,0', **kwargs)
     time.sleep(1)
-    gnb2 = net.addAccessPoint('gnb2', channel='1', vssids=['handover,handover,handover'], bssid_list={0:('gnb2','02:00:00:00:%s:00' % format(n_Cars+1,'02x'),'192.168.0.202',n_Cars,nSlices,flag2,flag3),1:('gnb1','02:00:00:00:%s:00' % format(n_Cars,'02x'),'0')}, dpid='2', position='1390,30,0', **kwargs)
+    gnb2 = net.addAccessPoint('gnb2', channel='1', vssids=['handover,handover,handover'], bssid_list={0:('gnb2','02:00:00:00:%s:00' % format(n_Vehicles+1,'02x'),'192.168.0.202',n_Vehicles,nSlices,flag2,flag3),1:('gnb1','02:00:00:00:%s:00' % format(n_Vehicles,'02x'),'0')}, dpid='2', position='1390,30,0', **kwargs)
     
     debug("*** Creating switches\n")
     sre21 = net.addSwitch('sre21', dpid='6')
@@ -221,7 +218,7 @@ def topology(flag,flag2,flag3,flag4):
     time.sleep(1)
     
     ######################## Setting IP addressing
-    for x in range(0, n_Cars):
+    for x in range(0, n_Vehicles):
         cars[x].setIP('10.1.1.%s/24' % (x+100), intf="car%s-wlan0" % (x))
     
     #cars[0].setIP('10.1.1.100/24', intf="car0-wlan0")
@@ -254,7 +251,7 @@ def topology(flag,flag2,flag3,flag4):
     time.sleep(0.5)
 
     ######################## Enabling monitor interface for beacon sniffing
-    for x in range(0, n_Cars_test):    
+    for x in range(0, n_Vehicles_test):    
         cars[x].cmd('iw dev car%s-wlan0 interface add car%s-mon0 type monitor'% (x,x))
         time.sleep(1)
         cars[x].cmd('ip link set car%s-mon0 up'% x)
@@ -388,13 +385,13 @@ def topology(flag,flag2,flag3,flag4):
 
     
     ######################## Configuring temporary routing in vehicles
-    for x in range(0, n_Cars):   
+    for x in range(0, n_Vehicles):   
         cars[x].cmd('ip route add 192.168.0.0/24 dev car%s-wlan0' % x)
         cars[x].cmd('ip route add 10.1.0.0/16 dev car%s-wlan0' % x)
     
     ######################## Execute the script in the vehicles, which collects and sends the inputs for our mechanism.
-    for x in range(0, n_Cars_test):   
-        os.system('xterm -hold -title "car%s" -e "alias python=python2  && cd /home/mininet/v2x-slicing/single/ryu && source bin/activate && /home/mininet/mininet-wifi/util/m car%s python /home/mininet/v2x-slicing/single/ryu/inputs_collection.py %s %s %s %s %s %s %s %s" &' % (x,x,x,n_Cars,reqQoS_Cars[x][0],reqQoS_Apps[1][0],reqQoS_Apps[2][0],reqQoS_Apps[3][0]))
+    for x in range(0, n_Vehicles_test):   
+        os.system('xterm -hold -title "car%s" -e "alias python=python2  && cd /home/mininet/v2x-slicing/single/ryu && source bin/activate && /home/mininet/mininet-wifi/util/m car%s python /home/mininet/v2x-slicing/single/ryu/inputs_collection.py %s %s %s %s %s %s %s %s" &' % (x,x,x,n_Vehicles,reqQoS_Cars[x][0],reqQoS_Apps[1][0],reqQoS_Apps[2][0],reqQoS_Apps[3][0]))
         time.sleep(1)
     
     
@@ -417,14 +414,13 @@ def topology(flag,flag2,flag3,flag4):
     
 
 if __name__ == '__main__':
-    flag = sys.argv[1]
-    flag2 = sys.argv[2]
-    flag3 = sys.argv[3]
-    flag4 = sys.argv[4]
+    flag2 = sys.argv[1]
+    flag3 = sys.argv[2]
+    flag4 = sys.argv[3]
     setLogLevel('debug')
     os.system('sudo fuser -k 1812/udp')
     os.system('sudo systemctl stop freeradius.service')
     os.system('fuser -k 6653/tcp')    
     os.system('rm -f radius.txt;')
     time.sleep(1)
-    topology(flag,flag2,flag3,flag4)
+    topology(flag2,flag3,flag4)
