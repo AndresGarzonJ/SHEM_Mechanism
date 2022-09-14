@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 """
-Este script tiene implementado 3 gnbs, cada uno con 3 slices
-    cada gnb tiene las siguientes interfaces
+This script has implemented 3 gnbs, each one with 3 slices
+    each gnb has the following interfaces
         gnbj-wlan1                           IP=10.{j}.{k}.0/24  Mac = 02:00:00:00:j:00 k=0     Esta interfaz es deshabilitada
         gnbj-wlan1-0    -- Slice 1           IP=10.{j}.{k}.0/24  Mac = 02:00:00:00:j:01 k=1
         gnbj-wlan1-1    -- Slice 2           IP=10.{j}.{k}.0/24  Mac = 02:00:00:00:j:02 k=2
@@ -14,20 +14,20 @@ Este script tiene implementado 3 gnbs, cada uno con 3 slices
             Slice 2 - V2N-1,   con 25M en 10.x.2.x en gnbj-wlan1-1
             Slice 3 - V2N-2,   con 35M en 10.x.3.x en gnbj-wlan1-2
 
-    Cada carro tiene una sola interfaz wlan. 
+    Each vehicle has only one wlan interface. 
         car_id  car0, entonces car_id=0
         IP      10.j.k.{car_id + 100}
         MAC     02:00:00:00:{car_id}:00 , car_id en base 16
 
 
-Tiene 1 un servidor Radius          IP: 192.168.0.210
+This script has 1 Radius server                 IP: 192.168.0.210
 
-Tiene 3 servidores de aplicaciones       
+This script has 3 application servers       
         sNon-V2N                    IP: 192.168.0.220
         sv2n_1                      IP: 192.168.0.221
         sv2n_2                      IP: 192.168.0.222
 
-Para ejecutar este script debe:
+################ To execute this script:
 
     #Terminal 1
     sudo systemctl stop  network-manager.service
@@ -44,19 +44,21 @@ Para ejecutar este script debe:
     sudo PYTHONPATH=. ./bin/ryu-manager ryu/app/wifi.py ryu/app/simple_switch_13.py
     #deactivate  
 
-    # Termianl Opcional
-    sudo su
-    ps aux  --sort pmem
-    killall python && sync && echo 3 > /proc/sys/vm/drop_caches
-    cd /home/mininet/mininet-wifi/util/
-    ./m car0 wpa_cli -i car0-wlan0
+    # Terminal 3 - Optional commands
+        # Super User Mode
+        sudo su
 
-    # Termianl 4
-    sudo su
-    cd /home/mininet/mininet-wifi/util/
-    ./m car0 iw dev car0-wlan0 link
+        # View RAM usage
+        ps aux  --sort pmem
 
+        # Kill python processes
+        killall python 
 
+        # Open "car0-wlan0" interface
+        cd /home/mininet/mininet-wifi/util/ && ./m car0 wpa_cli -i car0-wlan0
+
+        # Getting link status of "car0-wlan0"
+        cd /home/mininet/mininet-wifi/util/ && ./m car0 iw dev car0-wlan0 link
 
 
 ############### Test1 - Network Slicing
