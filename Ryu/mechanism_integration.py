@@ -67,6 +67,5 @@ class wifiAPP(app_manager.RyuApp):
             if _ipv4.proto == 17 and _ipv4.dst == '192.168.0.200':  # UDP
                 _wifi = pkt.get_protocol(wifi.WiFiMsg)
 
-                self.obj_SHEM.monitoring(_wifi)
-
-                
+                # Integration with SHEM
+                self.obj_SHEM.monitoring(_wifi)                
