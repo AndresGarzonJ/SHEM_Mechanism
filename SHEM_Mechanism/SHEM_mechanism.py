@@ -42,7 +42,7 @@ class Shem():
                     # 4 - rssi_j_k_t_1
                     # 5 - rssi_j_k_t
             
-            # Comprueba si el carro esta conectado a un gnb
+            # Check if the vehicle is connected to a gnb/slice
             if source_mac_j_k != "DISCONNECTED":
                 id_vehicle=0
 
@@ -125,7 +125,7 @@ class Shem():
                     pass
 
         # Se borra el contenido del archivo del traspaso realizado
-        print("* log_wpa borrado")
+        print("* log_wpa deleted")
         with open('/home/mininet/v2x-slicing/single/ryu/log_wpa/car%s-wlan0.log' % (id_vehicle),'w') as file2: pass
 
         
@@ -165,61 +165,60 @@ class Shem():
         MAC_jk_target_menor_carga = None
         MAC_jk_target_LLC_menor_carga = None
         
-        # Verifica las variables iniciadoras de traspaso
-        # Primera opcion de traspaso, intensidad de señal degradada
+        # Checks HM initiator variables - RSSI, Load
+        # First handover option, degraded RSSI
         if int(j_k_list[jk_source][5]) <= self.threshold_rssi_handover:
-            # Verificar si se esta alejando (rssi_t - rssi_t_1 = es menor que cero)
+            # Check if the vehicle is driving away (rssi_t - rssi_t_1 < 0)
             if (int(j_k_list[jk_source][5]) - int(j_k_list[jk_source][4])) < 0:
-                # Evaluar la load y rssi para seleccionar el slice_jk objetivo 
-                # 1. Evaluar la carga, es decir, encontrar el slice la menor carga
+                # Evaluate load and rssi to select the target slice_jk 
+                # 1. Evaluate the load, i.e., find the slice with the lowest load
                 for temp_idSlice in j_k_list:
-                    # Solamente Evalue los slices que estan en otros gnb j
+                    # Only evaluate slices that are in other gnb != j
                     t_temp_idSlice = str(temp_idSlice)
                     temp_j = t_temp_idSlice[:-1]
                     if int(temp_j) != j_source:
                         
-                        # Verificar si se esta acercando a ese slice, es decir, el rssi mejora
+                        # Check if the vehicle is approaching this slice, i.e. the rssi improves.
                         if (int(j_k_list[temp_idSlice][5]) - int(j_k_list[temp_idSlice][4])) > 0:
                             
-                            # Encontrar el slice la menor carga
+                            # Find the slice with the lowest load
                             if menorCarga >= int(j_k_list[temp_idSlice][3]):
                                 menorCarga = int(j_k_list[temp_idSlice][3])
                                 jk_target_menor_carga = int(temp_idSlice)
-                                #print("Posible 1")
+                                #print("First option of HM")
                                 
-                                # Verificar si ese slice es de baja latencia
+                                # Verify if that target slice is low latency
                                 if  int(j_k_list[temp_idSlice][3]) < self.threshold_load and lat_req_vehicle <= int(j_k_list[temp_idSlice][1]):                                                    
-                                    #print("Posible 2")
+                                    #print("Second option of HM")
                                     jk_target_LLC_menor_carga = jk_target_menor_carga
                 
-            # Verificar si se esta acercando (rssi_t - rssi_t_1 = es mayor que cero)
+            # Verify if the vehicle is approaching (rssi_t - rssi_t_1 > 0)
             #elif (j_k_list[jk_source][5] - j_k_list[jk_source][4]) > 0:
             #    print("No Traspaso")
             elif  j_k_list[jk_source][4] == j_k_list[jk_source][5]:
-                #print("1.4 Sin desicion - Carro quieto")
+                #print("1.4 No decision - Vehicle stationary")
                 pass
             else:
-                #print("1.5 Sin desicion - Mejorando senal")
+                #print("1.5 No decision - Improving signal")
                 pass                                
 
-        # Segunda opcion de traspaso, dado que existe carga alta en el slice actual
+        # Second transfer option, high load on the source slice
         elif int(j_k_list[jk_source][3]) > self.threshold_load:
-            # Evaluar la load y rssi para seleccionar el slice_jk objetivo 
-            # 1. Evaluar la carga, es decir, encontrar el slice la menor carga
+            # Evaluate load and rssi to select the target slice_jk 
+            # 1. Evaluate the load, i.e., find the slice with the lowest load
             for temp_idSlice in j_k_list:
-                # Evalue los slices que estan en otros gnb j
+                # Only evaluate slices that are in other gnb != j
                 #if temp_idSlice//10 != j_source:
 
-                # Verificar si se esta acercando a ese slice, es decir, el rssi mejora
+                # Verify if the vehicle is approaching that target slice, i.e., the rssi improves
                 #if (j_k_list[temp_idSlice][5] - j_k_list[temp_idSlice][4]) > 0:
 
-                # Encontrar el slice con la menor carga
-                
+                # Find the slice with the lowest load                
                 if menorCarga >= int(j_k_list[temp_idSlice][3]):
                     menorCarga = int(j_k_list[temp_idSlice][3])
                     jk_target_menor_carga = int(temp_idSlice)
-                    # Verificar si ese slice es de baja latencia
-                    
+
+                    # Verify if that target slice is low latency.                    
                     #if  lat_req_vehicle <= int(j_k_list[temp_idSlice][1]):
                     if  lat_req_vehicle <= int(j_k_list[temp_idSlice][1]) and int(j_k_list[temp_idSlice][3]) < self.threshold_load:
                         jk_target_LLC_menor_carga = jk_target_menor_carga                                  
@@ -232,7 +231,7 @@ class Shem():
                         #if temp_idSlice//10 == j_source:
                         #    break            
         else:
-            #print("0. Mantener conexion %s" % jk_source)
+            #print("0. Maintain connection %s" % jk_source)
             pass
 
         if jk_target_menor_carga != None:
@@ -247,7 +246,7 @@ class Shem():
     def actuator(self,j_source,k_source,jk_target_menor_carga,jk_target_LLC_menor_carga,id_vehicle,mac_vehicle,jk_source,MAC_jk_target_menor_carga,MAC_jk_target_LLC_menor_carga):
 
         if jk_target_menor_carga == None:
-            #print("1.0 Mantener conexion %s" % jk_source)
+            #print("1.0 Maintain connection %s" % jk_source)
             pass
         elif jk_target_LLC_menor_carga != None and jk_target_LLC_menor_carga != jk_source:
             print("Car%s - 1.1 HM of %s to %s" % (id_vehicle,jk_source,jk_target_LLC_menor_carga))
