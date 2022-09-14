@@ -10,11 +10,10 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 MODULE_PATH_2 = "/home/mininet/v2x-slicing/single/ryu/lib/python2.7/site-packages/scapy"
 sys.path.append(os.path.dirname(os.path.expanduser(MODULE_PATH_2)))
 from scapy.all import *
-#from scapy import *
 import time
 
 """
-La red tiene 3 servidores, y cada gNB tiene 3 slices
+The network has 3 servers, and each gNB has 3 slices.
 
 slice Non-V2N = 10 Mbps --- gNB{J}-wlan1-1  --- 192.168.0.220 --- 10.{J}.1.{id_car+100}  --- iperf port 5001
 slice V2N-1   = 25 Mbps --- gNB{J}-wlan1-2  --- 192.168.0.221 --- 10.{J}.2.{id_car+100}  --- iperf port 5002
