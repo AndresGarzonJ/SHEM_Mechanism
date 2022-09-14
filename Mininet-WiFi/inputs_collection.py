@@ -26,10 +26,10 @@ time_ref_scan = 0
 time_Scan = 0
 
 
-######################## Test ############################
-######################## Test ############################
+######################## Parameters for testing - Start
 time_send = 1.5
 time_scan_flag = 5
+######################## Parameters for testing - End
 
 id_t_s_asociacion = 0
 id_t_r_asociacion = 0
