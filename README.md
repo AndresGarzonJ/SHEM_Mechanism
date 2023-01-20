@@ -5,3 +5,4 @@
 `<link>` : <https://github.com/YeisonHunt/article_SHEM>
 
 ![Image text](https://github.com/AndresGarzonJ/SHEM_Mechanism/blob/main/4.4-herramientas.svg)
+![Image text](https://github.com/AndresGarzonJ/SHEM_Mechanism/blob/main/4.1-escenario-2gnb.svg)
